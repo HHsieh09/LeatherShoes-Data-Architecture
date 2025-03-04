@@ -1,6 +1,6 @@
 # End-to-End Data Architecture for Leather Shoe Company
 
-![GitHub repo size](https://img.shields.io/github/repo-size/HHsieh09/LeatherShoe-Data-Architecture) ![GitHub contributors](https://img.shields.io/github/contributors/HHsieh09/LeatherShoe-Data-Architecture) ![GitHub issues](https://img.shields.io/github/issues/HHsieh09/LeatherShoe-Data-Architecture)
+![GitHub repo size](https://img.shields.io/github/repo-size/HHsieh09/LeatherShoes-Data-Architecture) ![GitHub contributors](https://img.shields.io/github/contributors/HHsieh09/LeatherShoes-Data-Architecture) ![GitHub issues](https://img.shields.io/github/issues/HHsieh09/LeatherShoes-Data-Architecture)
 
 ## Project Description
 This project establishes a comprehensive **End-to-End Data Architecture** for a Leather Shoe Company, addressing inefficiencies in data management, financial record-keeping, and business insight generation. By leveraging a scalable **data warehouse** and a **Flask-based web application**, the system provides real-time performance insights and automates financial tracking.
