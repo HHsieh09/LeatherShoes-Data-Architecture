@@ -80,7 +80,7 @@ Ensure you have the following installed:
 | Database | MySQL (AWS RDS), Redshift |
 | Data Pipeline | AWS Glue, S3 |
 | Programming Language | Python |
-| Machine Learning | OpenAI API |
+| LLM Deployment | OpenAI API |
 | Deployment | AWS EC2 |
 
 ## Data Flow Architecture
