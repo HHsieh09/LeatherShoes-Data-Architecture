@@ -17,6 +17,7 @@ This project establishes a comprehensive **End-to-End Data Architecture** for a 
 - [Contributing](#contributing)
 
 ## Key Features
+- **Daily Log Storage**: System logs are stored daily and uploaded to **RDS** for tracking and debugging.
 - **Flask Web Application**: User-friendly dashboard for performance monitoring and financial record-keeping.
 - **Data Warehouse Integration**: Implementation of **AWS Redshift** for advanced analytics.
 - **ETL Pipelines**: Automated data ingestion and transformation using **AWS Glue**.
@@ -85,6 +86,7 @@ Ensure you have the following installed:
 1. **Data Ingestion**:
    - Transactional data from **SQL Server**
    - Web application data stored in **AWS RDS**
+   - System logs stored daily and uploaded to **RDS** for analysis
 2. **Data Transformation**:
    - **AWS Glue** cleanses and processes data
    - Staged data stored in **Amazon S3**
