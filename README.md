@@ -14,9 +14,7 @@ This project establishes a comprehensive **End-to-End Data Architecture** for a 
 - [Usage](#usage)
 - [Technology Stack](#technology-stack)
 - [Data Flow Architecture](#data-flow-architecture)
-- [Badges](#badges)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Key Features
 - **Flask Web Application**: User-friendly dashboard for performance monitoring and financial record-keeping.
