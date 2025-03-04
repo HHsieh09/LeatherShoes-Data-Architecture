@@ -96,12 +96,5 @@ Ensure you have the following installed:
    - Flask app queries Redshift for analytics
    - OpenAI API extracts insights
 
-## Badges
-Badges help display key project statistics and links to important tools. These badges automatically update themselves:
-
-![GitHub repo size](https://img.shields.io/github/repo-size/your-repo/leather-shoe-data-architecture) ![GitHub contributors](https://img.shields.io/github/contributors/your-repo/leather-shoe-data-architecture) ![GitHub issues](https://img.shields.io/github/issues/your-repo/leather-shoe-data-architecture)
-
-For more badges, visit [Shields.io](https://shields.io/).
-
 ## Contributing
 This project is intended for demonstration purposes and is not open to external contributions.
