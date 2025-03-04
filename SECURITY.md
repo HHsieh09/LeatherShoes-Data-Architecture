@@ -53,5 +53,5 @@ We follow industry best practices for responsible disclosure of security vulnera
 
 For any security-related concerns, please reach out to the project maintainers directly.
 
-**Last Updated:** [Insert Date]
+**Last Updated:** March 4, 2025
 
