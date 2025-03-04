@@ -53,7 +53,7 @@ Ensure you have the following installed:
    ```
 5. Run the admin application to setup an admin account:
    ```sh
-   python app.py
+   python admin.py
    ```
 6. Run the Flask application:
    ```sh
