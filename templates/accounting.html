@@ -1,0 +1,359 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Accounting Dashboard {% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+{% endblock stylesheets %}
+
+{% block content %}
+
+
+<div class="container-fluid dashboard-container">
+  <div class="row mb-4">
+      <div class="col-12">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+              <h2 class="page-title">
+                  <i class="fas fa-chart-line me-2"></i>
+                  Leather Shoes Co. - Accounting Dashboard
+              </h2>
+          </div>
+          <p class="text-muted mb-4">Analyze the operational profit trends of individual branches and the overall business</p>
+          <hr class="mb-4">
+      </div>
+  </div>
+
+  <!-- 1. Branch-wise Profit Last Month vs Previous Month -->
+  <div class="row">
+      <div class="col-md-6 mb-4">
+          <div class="card shadow-sm">
+              <div class="card-body">
+                  <h5 class="card-title">Branch profitability comparison (last month vs. previous month)</h5>
+                  <canvas id="BranchProfitLastMonth"></canvas>
+                  <button class="btn btn-primary mt-3" onclick='explainChart("bar", chartData.BranchProfitLastMonth, "Branch Profit Comparison (Last Month vs Previous Month)", "BranchProfitLastMonthExplanation")'>
+                    AI Explain
+                  </button>
+                  <p id="BranchProfitLastMonthExplanation" class="mt-2 text-muted"></p>
+              </div>
+          </div>
+      </div>
+
+      <!-- 2. Branch-wise Profit This Year vs Last Year -->
+      <div class="col-md-6 mb-4">
+          <div class="card shadow-sm">
+              <div class="card-body">
+                  <h5 class="card-title">Branch profitability comparison (this year vs. last year)</h5>
+                  <canvas id="BranchProfitThisYear"></canvas>
+                  <button class="btn btn-primary mt-3" onclick='explainChart("bar", chartData.BranchProfitThisYear, "Branch Profit Comparison (This Year vs Last Year)", "BranchProfitThisYearExplanation")'>
+                    AI Explain
+                  </button>
+                  <p id="BranchProfitThisYearExplanation" class="mt-2 text-muted"></p>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <!-- 3. Top 10 Expenses Last Month vs Previous Month -->
+  <div class="row">
+      <div class="col-md-6 mb-4">
+          <div class="card shadow-sm">
+              <div class="card-body">
+                  <h5 class="card-title">Top ten expenditures (last month vs. previous month)</h5>
+                  <canvas id="TopExpensesLastMonth"></canvas>
+                  <button class="btn btn-primary mt-3" onclick='explainChart("bar", chartData.TopExpensesLastMonth, "Top 10 Expenses (Last Month vs Previous Month)", "TopExpensesLastMonthExplanation")'>
+                    AI Explain
+                  </button>
+                  <p id="TopExpensesLastMonthExplanation" class="mt-2 text-muted"></p>
+              </div>
+          </div>
+      </div>
+  <!-- 4. Top 10 Expenses This Year vs Last Year -->
+      <div class="col-md-6 mb-4">
+          <div class="card shadow-sm">
+              <div class="card-body">
+                  <h5 class="card-title">Top ten expenditures (this year vs. last year)</h5>
+                  <canvas id="TopExpensesThisYear"></canvas>
+                  <button class="btn btn-primary mt-3" onclick='explainChart("bar", chartData.TopExpensesThisYear, "Top 10 Expenses (This Year vs Last Year)", "TopExpensesThisYearExplanation")'>
+                    AI Explain
+                  </button>
+                  <p id="TopExpensesThisYearExplanation" class="mt-2 text-muted"></p>
+              </div>
+          </div>
+      </div>
+  </div>
+
+
+<br>
+<div class="container-fluid">
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header pb-0">
+          <div class="row">
+            <div class="col-7">
+              <h6>Accounting bookkeeping data</h6>
+            </div>
+            <div class="col-5 my-auto text-end">
+              <form method="POST" enctype="multipart/form-data">
+                <div class="row">
+                  <div class="col">
+                    <input class="form-control" type="file" id="datafile" name="datafile">
+                  </div>
+                  <div class="col">
+                    <button type="submit" class="btn btn-primary">上傳</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card-body px-0 pb-2">
+          <div class="table-responsive">
+            <table id="accountingTable" class="table">
+              <thead>
+                <tr>
+                  <th>Branch</th>
+                  <th>Employee</th>
+                  <th>Date</th>
+                  <th>Accounting Type</th>
+                  <th>Explanation</th>
+                  <th>Amount</th>
+                  <th>
+                    <a href="accounting_add"><i class="bi bi-plus-square"></i></a>
+                    <a href="/accounting_download"><i class="bi bi-filetype-xlsx"></i></a>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in accounting_data %}
+                <tr>
+                  <td>{{ row[1] }}</td>
+                  <td>{{ row[2] }}</td>
+                  <td>{{ row[3] }}</td>
+                  <td>{{ row[4] }}</td>
+                  <td>{{ row[5] }}</td>
+                  <td>{{ row[6] }}</td>
+                  {% if current_user.is_authenticated %}
+                  <td>
+                    <a style="color:blue" href="/accounting_edit/{{ row[0] }}"> <i class="bi bi-pencil-fill"></i></a>
+                    <a style="color:red; cursor:pointer;" onclick="confirmDelete('{{ row[0] }}')">
+                      <i class="bi bi-trash-fill"></i>
+                    </a>
+                  </td>
+                  {% endif %}
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  {% include 'includes/footer.html' %}
+</div>
+
+
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<!-- Initialize Charts -->
+<script>
+  const chartData = JSON.parse('{{ chart_data | tojson | safe }}');
+
+  // Branch-wise Profit Last Month vs Previous Month
+  new Chart(document.getElementById('BranchProfitLastMonth'), {
+    type: 'bar',
+    data: {
+      labels: chartData.BranchProfitLastMonth.labels,
+      datasets: [
+        {
+          label: 'Last Month',
+          data: chartData.BranchProfitLastMonth.datasets[0].data,
+          backgroundColor: 'rgba(54, 162, 235, 0.2)'
+        },
+        {
+          label: 'Previous Month',
+          data: chartData.BranchProfitLastMonth.datasets[1].data,
+          backgroundColor: 'rgba(255, 99, 132, 0.2)'
+        }  
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: 'Profit ($)' }
+        }
+      },
+      plugins: {
+        legend: { position: 'top' }
+      }
+    }
+  });
+
+
+  // Branch-wise Profit This Year vs Last Year
+  new Chart(document.getElementById('BranchProfitThisYear'), {
+    type: 'bar',
+    data: {
+      labels: chartData.BranchProfitThisYear.labels,
+      datasets: [
+        {
+          label: 'This Year',
+          data: chartData.BranchProfitThisYear.datasets[0].data,
+          backgroundColor: 'rgba(75, 192, 192, 0.2)'
+        },
+        {
+          label: 'Last Year',
+          data: chartData.BranchProfitThisYear.datasets[1].data,
+          backgroundColor: 'rgba(153, 102, 255, 0.2)'
+        }  
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: 'Profit ($)' }
+        }
+      },
+      plugins: {
+        legend: { position: 'top' }
+      }
+    }
+  });
+
+  //Top 10 Expenses Last Month vs Previous Month
+  new Chart(document.getElementById('TopExpensesLastMonth'), {
+    type: 'bar',
+    data: {
+      labels: chartData.TopExpensesLastMonth.labels,
+      datasets: [
+        {
+          label: 'Last Month',
+          data: chartData.TopExpensesLastMonth.datasets[0].data,
+          backgroundColor: 'rgba(54, 162, 235, 0.2)'
+        },
+        {
+          label: 'Previous Month',
+          data: chartData.TopExpensesLastMonth.datasets[1].data,
+          backgroundColor: 'rgba(255, 99, 132, 0.2)'
+        }  
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: 'Expenses ($)' }
+        }
+      },
+      plugins: {
+        legend: { position: 'top' }
+      }
+    }
+  });
+
+  //Top 10 Expenses This Year vs Last Year
+  new Chart(document.getElementById('TopExpensesThisYear'), {
+    type: 'bar',
+    data: {
+      labels: chartData.TopExpensesThisYear.labels,
+      datasets: [
+        {
+          label: 'This Year',
+          data: chartData.TopExpensesThisYear.datasets[0].data,
+          backgroundColor: 'rgba(75, 192, 192, 0.2)'
+        },
+        {
+          label: 'Last Year',
+          data: chartData.TopExpensesThisYear.datasets[1].data,
+          backgroundColor: 'rgba(153, 102, 255, 0.2)'
+        }  
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: 'Expenses ($)' }
+        }
+      },
+      plugins: {
+        legend: { position: 'top' }
+      }
+    }
+  });
+
+</script>
+
+
+<!-- Chart Explanation -->
+<script>
+  function explainChart(chartType, chartData, title, explanationElementId) {
+    fetch("/explain_chart", {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ chart_type: chartType, chart_data: chartData })
+  })
+    .then(response => response.json())
+    .then(data => {
+        console.log("📝 API Response:", data);  // Debugging line
+
+        let explanationElement = document.getElementById(explanationElementId);
+        if (!explanationElement) {
+            console.error("Element with ID", explanationElementId, "not found.");
+            return;
+        }
+
+        if (data.explanation) {
+            document.getElementById(explanationElementId).innerText = data.explanation;
+        } else {
+            document.getElementById(explanationElementId).innerText = "Error: No explanation received from API.";
+        }
+    })
+    .catch(error => {
+        console.error("Error fetching explanation:", error);
+        let explanationElement = document.getElementById(explanationElementId);
+        if (explanationElement) {
+          explanationElement.innerText = "An error occurred while fetching explanation.";
+        }
+    });
+  }
+</script>
+
+
+
+{% endblock content %}
+
+{% block javascripts %}
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+<script>
+  $(document).ready(function () {
+    $('#accountingTable').DataTable();
+  });
+</script>
+
+<script>
+  function confirmDelete(accountingID) {
+      if (confirm("You are about to delete this accounting data. Are you sure?")) {
+          window.location.href = "/accounting_delete/" + accountingID;
+      }
+  }
+</script>
+
+{% endblock javascripts %}
+

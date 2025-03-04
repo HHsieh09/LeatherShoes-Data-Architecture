@@ -1,0 +1,433 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<div class="container-fluid dashboard-container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="page-title">
+                    <i class="fas fa-chart-line me-2"></i>
+                    Leather Shoes Co. Dashboard
+                </h2>
+            </div>
+            <p class="text-muted mb-4">Analyze the operational profit trends of each branch and supplier</p>
+            <hr class="mb-4">
+        </div>
+    </div>
+
+    <!-- Total Profit Last Month -->
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Last month's total profit</h5>
+                    <h2 class="fw-bold text-success">${{ chart_data.TotalProfitLastMonth | round(2) }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Branch-wise Profit Last Month vs Previous Month -->
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Branch profitability comparison (last month vs. previous month)</h5>
+                    <canvas id="branchProfitLastMonthChart"></canvas>
+                    <button class="btn btn-primary mt-3" onclick='explainChart("bar", chartData.BranchProfitLastMonth, "Branch Profit Comparison (Last Month vs Previous Month)", "branchProfitLastMonthExplanation")'>
+                        AI Explain
+                    </button>
+                    <p id="branchProfitLastMonthExplanation" class="mt-2 text-muted"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Branch-wise Profit This Year vs Last Year -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Branch profitability comparison (this year vs. last year)</h5>
+                    <canvas id="branchProfitThisYearChart"></canvas>
+                    <button class="btn btn-primary mt-3" onclick='explainChart("bar", chartData.BranchProfitThisYear, "Branch Profit Comparison (This Year vs Last Year)", "BranchProfitThisYearExplanation")'>
+                        AI Explain
+                    </button>
+                    <p id="BranchProfitThisYearExplanation" class="mt-2 text-muted"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top 10 Best-Selling Products Last Month & Previous Month -->
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Top 10 best-selling products (last month vs. previous month)</h5>
+                    <canvas id="topProductsLastMonthChart"></canvas>
+                    <button class="btn btn-primary mt-3" onclick='explainChart("bar", chartData.TopProductsLastMonth, "Top 10 Best-Selling Products (Last Month vs Previous Month)", "TopProductsLastMonthExplanation")'>
+                        AI Explain
+                    </button>
+                    <p id="TopProductsLastMonthExplanation" class="mt-2 text-muted"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top 10 Best-Selling Products Previous Month -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Top 10 best-selling products (previous month)</h5>
+                    <canvas id="topProductsPreviousMonthChart"></canvas>
+                    <button class="btn btn-primary mt-3" onclick='explainChart("bar", chartData.TopProductsPreviousMonth, "Top 10 Best-Selling Products (Previous Month)", "TopProductsPreviousMonthExplanation")'>
+                        AI Explain
+                    </button>
+                    <p id="TopProductsPreviousMonthExplanation" class="mt-2 text-muted"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top 10 Best-Selling Products This Year & Last Year -->
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Top 10 best-selling products (this year vs. last year)</h5>
+                    <canvas id="topProductsThisYearChart"></canvas>
+                    <button class="btn btn-primary mt-3" onclick='explainChart("bar", chartData.TopProductsThisYear, "Top 10 Best-Selling Products (This Year vs Last Year)", "TopProductsThisYearExplanation")'>
+                        AI Explain
+                    </button>
+                    <p id="TopProductsThisYearExplanation" class="mt-2 text-muted"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top 10 Best-Selling Products Last Year -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title
+                    ">Top 10 best-selling products (last year)</h5>
+                    <canvas id="topProductsLastYearChart"></canvas>
+                    <button class="btn btn-primary mt-3" onclick='explainChart("bar", chartData.TopProductsLastYear, "Top 10 Best-Selling Products (Last Year)", "TopProductsLastYearExplanation")'>
+                        AI Explain
+                    </button>
+                    <p id="TopProductsLastYearExplanation" class="mt-2 text-muted"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supplier-wise Profit Last Month & This Year -->
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Best suppliers ranked by profit (last month)</h5>
+                    <canvas id="supplierProfitLastMonthChart"></canvas>
+                    <button class="btn btn-primary mt-3" onclick='explainChart("bar", chartData.SupplierProfitLastMonth, "Top Suppliers by Profit (Last Month)", "SupplierProfitLastMonthExplanation")'>
+                        AI Explain
+                    </button>
+                    <p id="SupplierProfitLastMonthExplanation" class="mt-2 text-muted"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Best suppliers ranked by profit (this year)</h5>
+                    <canvas id="supplierProfitThisYearChart"></canvas>
+                    <button class="btn btn-primary mt-3" onclick='explainChart("bar", chartData.SupplierProfitThisYear, "Top Suppliers by Profit (This Year)", "SupplierProfitThisYearExplanation")'>
+                        AI Explain
+                    </button>
+                    <p id="SupplierProfitThisYearExplanation" class="mt-2 text-muted"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overall Supplier Profit -->
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Best suppliers ranked by total profit</h5>
+                    <canvas id="supplierTotalProfitChart"></canvas>
+                    <button class="btn btn-primary mt-3" onclick='explainChart("bar", chartData.SupplierTotalProfit, "Top Suppliers by Total Profit", "SupplierTotalProfitExplanation")'>
+                        AI Explain
+                    </button>
+                    <p id="SupplierTotalProfitExplanation" class="mt-2 text-muted"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Initialize Charts -->
+<script>
+    let chartData;
+    try {
+        chartData = JSON.parse('{{ chart_data | tojson | safe }}');
+        console.log("Chart Data :", chartData);
+    } catch (error) {
+        console.error('Error parsing chart data:', error);
+        chartData = null;
+    }
+
+    // Branch Profit Comparison (Last Month vs Previous Month)
+    new Chart(document.getElementById('branchProfitLastMonthChart'), {
+        type: 'bar',
+        data: {
+            labels: chartData.BranchProfitLastMonth.labels,
+            datasets: [
+                {
+                    label: 'Last Month',
+                    data: chartData.BranchProfitLastMonth.LastMonthProfit,
+                    backgroundColor: '#36A2EB'
+                },
+                {
+                    label: 'Previous Month',
+                    data: chartData.BranchProfitLastMonth.PrevMonthProfit,
+                    backgroundColor: '#FF6384'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'Profit ($)' }
+                }
+            },
+            plugins: {
+                legend: { position: 'top' }
+            }
+        }
+    });
+
+    // Branch Profit Comparison (This Year vs Last Year)
+    new Chart(document.getElementById('branchProfitThisYearChart'), {
+        type: 'bar',
+        data: {
+            labels: chartData.BranchProfitThisYear.labels,
+            datasets: [
+                {
+                    label: 'This Year',
+                    data: chartData.BranchProfitThisYear.ThisYearProfit,
+                    backgroundColor: '#4BC0C0'
+                },
+                {
+                    label: 'Last Year',
+                    data: chartData.BranchProfitThisYear.LastYearProfit,
+                    backgroundColor: '#FF9F40'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'Profit ($)' }
+                }
+            },
+            plugins: {
+                legend: { position: 'top' }
+            }
+        }
+    });
+
+    // Top 10 Best-Selling Products (Last Month vs Previous Month)
+    new Chart(document.getElementById('topProductsLastMonthChart'), {
+        type: 'bar',
+        data: {
+            labels: chartData.TopProductsLastMonth.labels,
+            datasets: [
+                {
+                    label: 'Last Month',
+                    data: chartData.TopProductsLastMonth.LastMonthSales,
+                    backgroundColor: '#36A2EB'
+                },
+                {
+                    label: 'Previous Month',
+                    data: chartData.TopProductsLastMonth.PrevMonthSales,
+                    backgroundColor: '#FF6384'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true, title: { display: true, text: 'Quantity Sold' } }
+            },
+            plugins: { legend: { position: 'top' } }
+        }
+    });
+
+        // Top 10 Best-Selling Products (Previous Month)
+        new Chart(document.getElementById('topProductsPreviousMonthChart'), {
+        type: 'bar',
+        data: {
+            labels: chartData.TopProductsPreviousMonth.labels,
+            datasets: [{
+                label: 'Sales Quantity',
+                data: chartData.TopProductsPreviousMonth.Quantity,
+                backgroundColor: '#FF6384'
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true, title: { display: true, text: 'Quantity Sold' } }
+            }
+        }
+    });
+
+    // Top 10 Best-Selling Products (This Year vs Last Year)
+    new Chart(document.getElementById('topProductsThisYearChart'), {
+        type: 'bar',
+        data: {
+            labels: chartData.TopProductsThisYear.labels,
+            datasets: [
+                {
+                    label: 'This Year',
+                    data: chartData.TopProductsThisYear.ThisYearSales,
+                    backgroundColor: '#4BC0C0'
+                },
+                {
+                    label: 'Last Year',
+                    data: chartData.TopProductsThisYear.LastYearSales,
+                    backgroundColor: '#FF9F40'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true, title: { display: true, text: 'Quantity Sold' } }
+            },
+            plugins: { legend: { position: 'top' } }
+        }
+    });
+
+    // Top 10 Best-Selling Products (Last Year)
+    new Chart(document.getElementById('topProductsLastYearChart'), {
+        type: 'bar',
+        data: {
+            labels: chartData.TopProductsLastYear.labels,
+            datasets: [{
+                label: 'Sales Quantity',
+                data: chartData.TopProductsLastYear.Quantity,
+                backgroundColor: '#FF9F40'
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true, title: { display: true, text: 'Quantity Sold' } }
+            }
+        }
+    });
+
+    // Supplier Profit (Last Month)
+    new Chart(document.getElementById('supplierProfitLastMonthChart'), {
+        type: 'bar',
+        data: {
+            labels: chartData.SupplierProfitLastMonth.labels,
+            datasets: [{
+                label: 'Profit ($)',
+                data: chartData.SupplierProfitLastMonth.profit,
+                backgroundColor: '#FFCE56'
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true, title: { display: true, text: 'Profit ($)' } }
+            }
+        }
+    });
+
+    // Supplier Profit (This Year)
+    new Chart(document.getElementById('supplierProfitThisYearChart'), {
+        type: 'bar',
+        data: {
+            labels: chartData.SupplierProfitThisYear.labels,
+            datasets: [{
+                label: 'Profit ($)',
+                data: chartData.SupplierProfitThisYear.profit,
+                backgroundColor: '#36A2EB'
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true, title: { display: true, text: 'Profit ($)' } }
+            }
+        }
+    });
+
+    // Supplier Total Profit
+    new Chart(document.getElementById('supplierTotalProfitChart'), {
+        type: 'bar',
+        data: {
+            labels: chartData.SupplierTotalProfit.labels,
+            datasets: [{
+                label: 'Total Profit ($)',
+                data: chartData.SupplierTotalProfit.profit,
+                backgroundColor: '#FF6384'
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true, title: { display: true, text: 'Profit ($)' } }
+            }
+        }
+    });
+</script>
+
+<!-- Chart Explanation -->
+<script>
+    function explainChart(chartType, chartData, title, explanationElementId) {
+      fetch("/explain_chart", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ chart_type: chartType, chart_data: chartData })
+    })
+      .then(response => response.json())
+      .then(data => {
+          console.log("📝 API Response:", data);  // Debugging line
+  
+          let explanationElement = document.getElementById(explanationElementId);
+          if (!explanationElement) {
+              console.error("Element with ID", explanationElementId, "not found.");
+              return;
+          }
+  
+          if (data.explanation) {
+              document.getElementById(explanationElementId).innerText = data.explanation;
+          } else {
+              document.getElementById(explanationElementId).innerText = "Error: No explanation received from API.";
+          }
+      })
+      .catch(error => {
+          console.error("Error fetching explanation:", error);
+          let explanationElement = document.getElementById(explanationElementId);
+          if (explanationElement) {
+            explanationElement.innerText = "An error occurred while fetching explanation.";
+          }
+      });
+    }
+</script>
+
+{% endblock %}

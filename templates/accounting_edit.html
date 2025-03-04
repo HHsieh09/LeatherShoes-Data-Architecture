@@ -1,0 +1,151 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Edit Accounting Data {% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+
+<style>
+    .form-control {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 8px;
+        font-size: 14px;
+    }
+    .form-control:focus {
+        border-color: #007bff;
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+    label {
+        font-weight: bold;
+    }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header pb-0">
+                    <h6>Edit Accounting Data</h6>
+                </div>
+                <div class="card-body px-0 pb-2">
+                    <form method="POST" action="{{ url_for('accounting_edit', id=accounting_data[0]) }}" class="px-3">
+                        <!-- ID -->
+                        <div class="row mb-3">
+                            <label for="AccountingID" class="col-sm-2 col-form-label">Accounting ID:</label>
+                            <div class="col-sm-10">
+                                <input type="text" id="AccountingID" name="AccountingID" class="form-control" value="{{ accounting_data[0] if accounting_data[0] else ''}}" readonly>
+                            </div>
+                        </div>
+
+                        <!-- Branch ID -->
+                        <div class="row mb-3">
+                            <label for="BranchID" class="col-sm-2 col-form-label">Branch:</label>
+                            <div class="col-sm-10">
+                                <select id="BranchID" name="BranchID" class="form-select" required>
+                                    <option disabled selected>Select Branch</option>
+                                    <option value="1" {{ 'selected' if accounting_data[1] == '1' else '' }}>1 Branch1</option>
+                                    <option value="2" {{ 'selected' if accounting_data[1] == '2' else '' }}>2 Branch2</option>
+                                    <option value="3" {{ 'selected' if accounting_data[1] == '3' else '' }}>3 Branch3</option>
+                                    <option value="4" {{ 'selected' if accounting_data[1] == '4' else '' }}>4 Branch4</option>
+                                    <option value="5" {{ 'selected' if accounting_data[1] == '5' else '' }}>5 Branch5</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Employee ID -->
+                        <div class="row mb-3">
+                            <label for="EmployeeID" class="col-sm-2 col-form-label">Employee:</label>
+                            <div class="col-sm-10">
+                                <select id="EmployeeID" name="EmployeeID" class="form-select" required>
+                                    <option disabled selected>Select Employee</option>
+                                    <option value="1" {{ 'selected' if accounting_data[2] == '1' else '' }}>Employee1</option>
+                                    <option value="2" {{ 'selected' if accounting_data[2] == '2' else '' }}>Employee2</option>
+                                    <option value="3" {{ 'selected' if accounting_data[2] == '3' else '' }}>Employee3</option>
+                                    <option value="4" {{ 'selected' if accounting_data[2] == '4' else '' }}>Employee4</option>
+                                    <option value="5" {{ 'selected' if accounting_data[2] == '5' else '' }}>Employee5</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Date -->
+                        <div class="row mb-3">
+                            <label for="Date" class="col-sm-2 col-form-label">Date:</label>
+                            <div class="col-sm-10">
+                                <input type="date" id="Date" name="Date" class="form-control" value="{{ accounting_data[3] if accounting_data [3] else '' }}" required>
+                            </div>
+                        </div>
+                        <!-- Amount -->
+                        <div class="row mb-3">
+                            <label for="Amount" class="col-sm-2 col-form-label">Amount:</label>
+                            <div class="col-sm-10">
+                                <input type="number" id="Amount" name="Amount" class="form-control" step="0.01" value="{{ accounting_data[6] if accounting_data [6] else '' }}" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <h5>Remember to enter the amount first, then select the accounting category</h5>
+                        </div>
+                        <!-- Accounting Type ID -->
+                        <div class="row mb-3">
+                            <label for="AccountingTypeID" class="col-sm-2 col-form-label">Accounting Type:</label>
+                            <div class="col-sm-10">
+                                <select id="AccountingTypeID" name="AccountingTypeID" class="form-select" required onchange="adjustAmount()">
+                                    <option disabled selected>Select Accounting Type</option>
+                                    <option value="1" {{ 'selected' if accounting_data[4] == 1 else '' }}>Payroll expenses</option>
+                                    <option value="2" {{ 'selected' if accounting_data[4] == 2 else '' }}>Rent expenses</option>
+                                    <option value="3" {{ 'selected' if accounting_data[4] == 3 else '' }}>Stationery supplies</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="row mb-3">
+                            <label for="Description" class="col-sm-2 col-form-label">Explanation:</label>
+                            <div class="col-sm-10">
+                                <textarea id="Description" name="Description" class="form-control" rows="4">{{ accounting_data[5] if accounting_data[5] else ''}}</textarea>
+                            </div>
+                        </div>
+
+                        <!-- Submit -->
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-success me-2">Submit</button>
+                            <a href="/accounting" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+    // JavaScript
+    function adjustAmount() {
+        var accountingType = document.getElementById("AccountingTypeID").value;
+        var amountInput = document.getElementById("Amount");
+
+        // Define expense Accounting Type IDs that should be negative
+        var expenseTypes = [
+            "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", 
+            "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "25", "26", 
+            "27", "28", "30", "31", "32", "33"
+        ];
+
+        // Convert amount to negative for expenses
+        if (expenseTypes.includes(accountingType)) {
+            if (amountInput.value > 0) {
+                amountInput.value = -Math.abs(amountInput.value);
+            }
+        } else {
+            amountInput.value = Math.abs(amountInput.value);
+        }
+    }
+</script>
+{% endblock javascripts %}

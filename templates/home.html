@@ -1,0 +1,46 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} About Us {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/about_us.css') }}">
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        display: flex; 
+        flex-direction: column; 
+        justify-content: center; 
+        align-items: center; 
+        height: 100vh;
+        margin: 0; 
+    }
+    h1 {
+        color: #333;
+        margin-bottom: 20px;
+    }
+    h2 {
+        color: #666;
+        margin-bottom: 30px;
+    }
+    img {
+        max-width: 80%;
+        height: auto;
+    }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+<h1>Dashboard</h1>
+<h2>Login to See the Content</h2>
+<img src="{{ url_for('static', filename='assets/img/123.png') }}" alt="Dashboard Image">
+
+
+{% endblock content %}
+{% block javascripts %}
+<script>
+  // JavaScript
+</script>
+{% endblock javascripts %}
